@@ -35,47 +35,21 @@ trait StandardPage {
 
   final private function renderHeader(): :xhp {
     return
-      <div class="hackHeader">
-        <div class="width">
-          <a href="http://hacklang.org/">
-            <div class="logo">Hack</div>
-          </a>
-          <div class="headerNav">
-          <ul>
-            <li>
-              <a href="http://hacklang.org/install/">Install</a>
-            </li>
-            <li>
-              <a href="http://hacklang.org/tutorial/">Tutorial</a>
-            </li>
-            <li>
-              <a href="/">Cookbook</a>
-            </li>
-            <li>
-              <a href="http://hhvm.com/manual">Docs</a>
-            </li>
-            <li>
-              <a href="http://github.com/facebook/hhvm">GitHub</a>
-            </li>
-            <li>
-              <a href="http://hhvm.com/">HHVM</a>
-            </li>
-          </ul>
-          </div>
-        </div>
+      <div class="header">
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a href="/">Home</a></li>
+          <li><a href="https://www.octohost.io">About</a></li>
+          <li><a href="https://www.octohost.io/">Contact</a></li>
+        </ul>
+        <h3 class="text-muted">octohost</h3>
       </div>;
   }
 
   final protected function render(): :xhp {
     return
-      <div>
+      <div class="container">
         {$this->renderHeader()}
-        <div class="width">
-          <div class="mainContainer">
-            <div class="mainColumn">{$this->renderMainColumn()}</div>
-            <hack:nav/>
-          </div>
-        </div>
+        {$this->renderMainColumn()}
     </div>;
   }
 }
