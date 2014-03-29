@@ -30,50 +30,64 @@ abstract class Recipe extends GetController {
 
   final protected function renderMainColumn(): :xhp {
     $main_column =
-      <div class="jumbotron">
-        <a href="https://www.octohost.io"><img src="https://ssl.octohost.io/assets/octohost/octohost-300-words.png" class="img-responsive" width="200" height="200" align="right" /></a>
-        <h1>Ramaze</h1>
-
-        <p class="lead"><a href="http://hacklang.org/" title="Hack">Hack</a> running on <a href="https://www.octohost.io">octohost</a>.</p>
-        <p><a class="btn btn-lg btn-success" href="https://www.octohost.io" role="button">Use it Free</a></p>
-      </div>;
-    $marketing =
-      <div class="row marketing">
-        <div class="col-lg-6">
-          <h4>Simple</h4>
-          <p>Add a <a href="http://docs.docker.io/en/latest/use/builder/" title="Dockerfiles for Images - Docker Documentation">Dockerfile</a> to your app's repository. Then git push to the octohost server. <a href="https://github.com/octohost">Examples here.</a></p>
-
-          <h4>Flexible</h4>
-          <p><a href="https://www.octohost.io/languages.html">Don't see a language you use?</a> They're really easy to add.</p>
-
-          <h4>Extendible</h4>
-          <p><a href="https://github.com/octohost/octohost/issues">We're just getting started</a>.</p>
+      <x:frag>
+        <h1>{$this->getName()}</h1>
+      </x:frag>;
+    $description = $this->getDescription();
+    if ($description !== null) {
+      $main_column->appendChild(<p>{$description}</p>);
+    }
+    foreach ($this->getFilenames() as $filename) {
+      $file =
+        <div class="file">
+          <div class="filename">{$filename}</div>
+          <phpfile filename={$filename}/>
+        </div>;
+      $main_column->appendChild($file);
+    }
+    $recipe = $this;
+    if ($recipe instanceof RecipeWithDemo) {
+      try {
+        $result = $recipe->getDemoResult();
+      } catch (Exception $e) {
+        $result = sprintf(
+          "Demo threw an %s:\n%s",
+          get_class($e),
+          $e->getMessage(),
+        );
+      }
+      $result = explode("\n", trim($result));
+      $result = array_map($x ==> <x:frag>{$x}<br/></x:frag>, $result);
+      $demo =
+        <x:frag>
+          <div class="demo" id="demo">
+            <h3>Demo</h3>
+            {$recipe->getDemoXHP()}
+            <div class="filename">{$recipe->getDemoFilename()}</div>
+            <phpfile filename={$recipe->getDemoFilename()}/>
+            <div class="filename">Output</div>
+            <div class="demoResult">
+              {$result}
+            </div>
+          </div>
+        </x:frag>;
+      $main_column->appendChild($demo);
+    }
+    if (!$this->getDocs()->isEmpty()) {
+      $render_doc_link = function($doc) {
+        list($name, $link) = $doc;
+        $link = "http://hhvm.com/manual/en/$link.php";
+        return <li><a href={$link}>{$name}</a></li>;
+      };
+      $main_column->appendChild(
+        <div class="docs">
+          <h3>Relevant Official Documentation</h3>
+          <ul>
+            {$this->getDocs()->map($render_doc_link)->toArray()}
+          </ul>
         </div>
-
-        <div class="col-lg-6">
-          <h4>Based on <a href="http://www.docker.io/" title="Homepage - Docker: the Linux container engine">Docker</a></h4>
-          <p>An open source project to pack, ship and run any application as a lightweight container.</p>
-
-          <h4>Works like <a href="https://www.heroku.com/">Heroku</a></h4>
-          <p>Very simple baby PaaS - git push to deploy your websites as needed.</p>
-
-          <h4>Open Source</h4>
-          <p><a href="https://www.octohost.io">Available</a> to try, use, deploy, extend at no cost.</p>
-        </div>
-      </div>;
-      $main_column->appendChild($marketing);
-      $footer =
-        <div class="footer">
-        <div style="float:left;">&copy; <a href="http://www.nonfiction.ca/" title="nonfiction studios - Home">nonfiction</a> 2014</div><div style="float:right;"><a href="https://twitter.com/octohost" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @octohost</a></div>
-        </div>
-
-        </div> <!-- /container -->
-        <!-- Bootstrap core JavaScript
-        ================================================== -->
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
-        <script src="https://ssl.octohost.io/assets/octohost/ga.js"></script>;
-      $main_column->appendChild($footer);
+      );
+    }
     return $main_column;
   }
 }
