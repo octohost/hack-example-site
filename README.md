@@ -1,5 +1,7 @@
 # Hack Lang Example Site
 
+## View this site on octohost [here](http://hack.octohost.io)
+
 ## Why does this site exist?
 
 The purpose of this site is to provide examples of how to use the Hack Language. This site should help in the following ways:
@@ -37,7 +39,7 @@ You can clone it wherever you like, but for this example I'm putting it in ~/hac
 
     cd ~
     git clone git@github.com:hhvm/hack-example-site.git
-    
+
 #### Run the setup script
 
     // Assuming you cloned hack-example-site to ~/hack-example-site
@@ -50,7 +52,7 @@ You can clone it wherever you like, but for this example I'm putting it in ~/hac
 
 #### Install HHVM with FastCGI
 
-    echo deb http://dl.hhvm.com/ubuntu saucy main | sudo tee /etc/apt/sources.list.d/hhvm.list 
+    echo deb http://dl.hhvm.com/ubuntu saucy main | sudo tee /etc/apt/sources.list.d/hhvm.list
     sudo apt-get update
     sudo apt-get install hhvm-fastcgi
 
@@ -58,7 +60,7 @@ You can clone it wherever you like, but for this example I'm putting it in ~/hac
 There is a simple HHVM config in this repo, which you can use. I just overwrite the server.hdf file, since that's the config that init.d uses. You can always edit the service or start hhvm yourself if you'd rather not overwrite server.hdf
 
     // Assuming you cloned hack-example-site to ~/hack-example-site
-    // If you don't want to overwrite server.hdf you can always point hhvm 
+    // If you don't want to overwrite server.hdf you can always point hhvm
     // to a config elsewhere
     sudo cp ~/hack-example-site/hhvm.hdf /etc/hhvm/server.hdf
 
