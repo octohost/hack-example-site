@@ -1,7 +1,5 @@
 # Hack Lang Example Site
 
-## View this site on octohost [here](http://hack.octohost.io)
-
 ## Why does this site exist?
 
 The purpose of this site is to provide examples of how to use the Hack Language. This site should help in the following ways:
